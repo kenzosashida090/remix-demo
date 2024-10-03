@@ -5,8 +5,8 @@ import type { ContactRecord } from "../data";
 
 export default function Contact() {
   const contact = {
-    first: "Your",
-    last: "Name",
+    first: "Kenzo",
+    last: "Sashida",
     avatar: "https://placecats.com/200/200",
     twitter: "your_handle",
     notes: "Some notes",
