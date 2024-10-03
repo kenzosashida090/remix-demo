@@ -1,11 +1,18 @@
 import {
   Form,
+  Link,
   Links,
   Meta,
   Scripts,
   ScrollRestoration,
-} from "@remix-run/react";
-
+    } from "@remix-run/react";
+import appStylesHref from "./app.css?url"; 
+import type { LinksFunction } from "@remix-run/node";
+export const links: LinksFunction = ()=>[
+    {rel:'stylesheet', href:appStylesHref}
+]
+import { Outlet } from "@remix-run/react";
+//Render all the nested routes that render app
 export default function App() {
   return (
     <html lang="en">
@@ -36,15 +43,15 @@ export default function App() {
           <nav>
             <ul>
               <li>
-                <a href={`/contacts/1`}>Your Name</a>
+                <Link to={`/contacts/1`}>Your Name</Link>
               </li>
               <li>
-                <a href={`/contacts/2`}>Your Friend</a>
+                <Link to={`/contacts/2`}>Your Friend</Link>
               </li>
             </ul>
           </nav>
         </div>
-
+        <Outlet/>
         <ScrollRestoration />
         <Scripts />
       </body>
