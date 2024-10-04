@@ -10,7 +10,7 @@ import {
 import { json } from "@remix-run/node"; // creates data into json 
 import appStylesHref from "./app.css?url"; 
 import { getContacts } from "./data";
-
+import { useRouteError } from "@remix-run/react";
 import type { LinksFunction } from "@remix-run/node";
 import { Outlet } from "@remix-run/react";//Render all the nested routes that render app
 
@@ -57,7 +57,7 @@ export default function App() {
 		      <ul>
 			  {contacts.map((contact)=> (
 				<li key={contact.id}>
-				    <Link to={`/contact/${contact.id}`}>
+				    <Link to={`/contacts/${contact.id}`}>
 					{contact.first || contact.last ?
 					    <>{contact.first} {contact.last}</>
 					    :
@@ -86,4 +86,25 @@ export default function App() {
       </body>
     </html>
   );
+}
+
+export function ErrorBoundary(){
+    const error = useRouteError()
+    console.log(error, "error========================")
+    return(
+	<html>
+	    <head>
+		<title>Oh no!</title>
+		<Meta/>
+		<Links/>
+	    </head>
+	    <body>
+		<div id='error-page'>
+		    <h1>Eror {error.status}</h1>
+		    <p>{error.data}</p>
+		</div>
+		<Scripts/>
+	    </body>
+	</html>
+    )
 }
