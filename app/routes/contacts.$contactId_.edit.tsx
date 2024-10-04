@@ -4,6 +4,7 @@ import { Form, useLoaderData } from "@remix-run/react"
 import invariant from "tiny-invariant"
 import type { LoaderFunctionArgs, ActionFunctionArgs } from "@remix-run/node"
 import { getContact, updateContact } from "~/data"
+import { useNavigate } from "@remix-run/react"
 export const loader = async({params}: LoaderFunctionArgs)=>{
     invariant(params.contactId, 'Missing contact Id param')
     const contact  = await getContact(params.contactId)
@@ -27,7 +28,7 @@ export const action = async({params,request}: ActionFunctionArgs) => {
 export default function ContactEdit() {
     const {contact} = useLoaderData<typeof loader>();
     console.log('from coantact componetn', contact) 
-    
+    const navigate = useNavigate()	
     return( 
     <>
 	<h1>Hi, {contact?.first} </h1>
@@ -78,7 +79,7 @@ export default function ContactEdit() {
       </label>
       <p>
         <button type="submit">Save</button>
-        <button type="button">Cancel</button>
+	<button onClick={()=> navigate(-1)} type="button">Cancel</button>
       </p>
     </Form>
     </>

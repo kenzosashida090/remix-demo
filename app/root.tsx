@@ -17,14 +17,21 @@ import type { LinksFunction } from "@remix-run/node";
 import { Outlet } from "@remix-run/react";//Render all the nested routes that render app
 import { createEmptyContact } from "./data";
 import { useNavigation } from "@remix-run/react";
+import { useEffect } from "react";
+import { useSubmit } from "@remix-run/react";
 export const links: LinksFunction = ()=>[
     {rel:'stylesheet', href:appStylesHref}
 
 ]
+import type { LoaderFunctionArgs } from "@remix-run/node";
 
-export const loader = async () =>{
-    const contacts = await getContacts()
-    return json({contacts}) 
+export const loader = async ({request}:LoaderFunctionArgs) =>{
+    
+    const url = new URL(request.url) // creates a url object
+    console.log(url,"==============URL==========")
+    const q = url.searchParams.get('q')
+    const contacts = await getContacts(q)
+    return json({contacts,q}) 
 }
 
 export const action = async() => {
@@ -32,8 +39,16 @@ export const action = async() => {
     return redirect(`/contacts/${contact.id}/edit`)
 }
 export default function App() {
- const {contacts} = useLoaderData<typeof loader>(); // from the loader function retrieve whatever returns that 
+ const {contacts,q} = useLoaderData<typeof loader>(); // from the loader function retrieve whatever returns that 
  const navigation = useNavigation()
+ useEffect(()=>{
+     const searchField = document.getElementById("q")
+     if(searchField instanceof HTMLInputElement){
+	 searchField.value = q || ""
+     }
+ },[q])
+
+ const submit = useSubmit()
  return (
     <html lang="en">
       <head>
@@ -53,6 +68,8 @@ export default function App() {
                 placeholder="Search"
                 type="search"
                 name="q"
+		onChange={(e)=>submit(`q=${e.target.value}`)}
+		defaultValue={q || ''}
               />
               <div id="search-spinner" aria-hidden hidden={true} />
             </Form>
