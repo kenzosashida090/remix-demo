@@ -1,6 +1,7 @@
 import {
   Form,
-  Link,
+  Link, 
+  NavLink,
   Links,
   Meta,
   Scripts,
@@ -10,10 +11,11 @@ import {
 import { json } from "@remix-run/node"; // creates data into json 
 import appStylesHref from "./app.css?url"; 
 import { getContacts } from "./data";
+import { redirect } from "@remix-run/node";
 import { useRouteError } from "@remix-run/react";
 import type { LinksFunction } from "@remix-run/node";
 import { Outlet } from "@remix-run/react";//Render all the nested routes that render app
-
+import { createEmptyContact } from "./data";
 export const links: LinksFunction = ()=>[
     {rel:'stylesheet', href:appStylesHref}
 
@@ -22,6 +24,11 @@ export const links: LinksFunction = ()=>[
 export const loader = async () =>{
     const contacts = await getContacts()
     return json({contacts}) 
+}
+
+export const action = async() => {
+    const contact =  await createEmptyContact();
+    return redirect(`/contacts/${contact.id}/edit`)
 }
 export default function App() {
  const {contacts} = useLoaderData<typeof loader>(); // from the loader function retrieve whatever returns that 
@@ -57,7 +64,8 @@ export default function App() {
 		      <ul>
 			  {contacts.map((contact)=> (
 				<li key={contact.id}>
-				    <Link to={`/contacts/${contact.id}`}>
+				    <NavLink to={`/contacts/${contact.id}`} className={({isActive, isPending})=>
+					isPending ? 'pending' : isActive ? "active": ""}>
 					{contact.first || contact.last ?
 					    <>{contact.first} {contact.last}</>
 					    :
@@ -69,7 +77,7 @@ export default function App() {
 					    :
 						null
 					}
-				    </Link>
+				    </NavLink>
 				</li>	
 			    
 			  ))}

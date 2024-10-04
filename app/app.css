@@ -232,7 +232,7 @@ i {
 }
 
 #sidebar nav a.active {
-  background: hsl(224, 98%, 58%);
+  background: green; 
   color: white;
 }
 
@@ -317,9 +317,13 @@ i {
 
 #contact-form {
   display: flex;
-  max-width: 40rem;
+  width:50%;
+  height:50%;
   flex-direction: column;
   gap: 1rem;
+  justify-content:center;
+  margin: auto auto;
+  
 }
 #contact-form > p:first-child {
   margin: 0;
