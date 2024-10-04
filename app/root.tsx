@@ -16,6 +16,7 @@ import { useRouteError } from "@remix-run/react";
 import type { LinksFunction } from "@remix-run/node";
 import { Outlet } from "@remix-run/react";//Render all the nested routes that render app
 import { createEmptyContact } from "./data";
+import { useNavigation } from "@remix-run/react";
 export const links: LinksFunction = ()=>[
     {rel:'stylesheet', href:appStylesHref}
 
@@ -32,6 +33,7 @@ export const action = async() => {
 }
 export default function App() {
  const {contacts} = useLoaderData<typeof loader>(); // from the loader function retrieve whatever returns that 
+ const navigation = useNavigation()
  return (
     <html lang="en">
       <head>
@@ -88,7 +90,10 @@ export default function App() {
 		  }
           </nav>
         </div>
-        <Outlet/>
+	  <div className={navigation.state === "loading" ? "loading": ""} id="detail">
+	    <Outlet/>
+	</div>
+        
         <ScrollRestoration />
         <Scripts />
       </body>
