@@ -49,6 +49,7 @@ export default function App() {
  },[q])
 
  const submit = useSubmit()
+ 
  return (
     <html lang="en">
       <head>
@@ -61,14 +62,13 @@ export default function App() {
         <div id="sidebar">
           <h1>Remix Contacts</h1>
           <div>
-            <Form id="search-form" role="search">
+	      <Form id="search-form" role="search" onChange={(event)=>{submit(event.currentTarget)}}>
               <input
                 id="q"
                 aria-label="Search contacts"
                 placeholder="Search"
                 type="search"
                 name="q"
-		onChange={(e)=>submit(`q=${e.target.value}`)}
 		defaultValue={q || ''}
               />
               <div id="search-spinner" aria-hidden hidden={true} />
